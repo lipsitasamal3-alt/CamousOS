@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="CampusOS – Student Success Dashboard by Lipsita Samal. Manage academics, attendance, resources and resume in one place." />
+  <title>CampusOS – Student Success Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- ═══════════════════════ SIDEBAR ═══════════════════════ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">🎓</div>
+      <div class="brand-text">
+        <span class="brand-name">CampusOS</span>
+        <span class="brand-tagline">Student Dashboard</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <span class="nav-section-label">Overview</span>
+      <button class="nav-item active" id="nav-dashboard" onclick="showModule('dashboard')">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">Dashboard</span>
+      </button>
+
+      <span class="nav-section-label" style="margin-top:10px;">Modules</span>
+      <button class="nav-item" id="nav-academics" onclick="showModule('academics')">
+        <span class="nav-icon">📚</span>
+        <span class="nav-label">Academic Hub</span>
+      </button>
+      <button class="nav-item" id="nav-attendance" onclick="showModule('attendance')">
+        <span class="nav-icon">📅</span>
+        <span class="nav-label">Attendance</span>
+      </button>
+      <button class="nav-item" id="nav-resources" onclick="showModule('resources')">
+        <span class="nav-icon">🔗</span>
+        <span class="nav-label">Resources</span>
+      </button>
+      <button class="nav-item" id="nav-resume" onclick="showModule('resume')">
+        <span class="nav-icon">📄</span>
+        <span class="nav-label">Resume Builder</span>
+      </button>
+
+      <span class="nav-section-label" style="margin-top:10px;">Account</span>
+      <button class="nav-item" id="nav-profile" onclick="showModule('profile')">
+        <span class="nav-icon">👤</span>
+        <span class="nav-label">Edit Profile</span>
+      </button>
+    </nav>
+
+  </aside>
+
+  <!-- Mobile hamburger -->
+  <button class="hamburger" id="hamburger" onclick="toggleSidebar()" aria-label="Toggle navigation">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+  <!-- ═══════════════════════ MAIN ═══════════════════════ -->
+  <main class="main-content" id="main-content">
+
+    <!-- ── TOP HEADER (Developer Info — Permanent) ── -->
+    <header class="top-header">
+      <div class="dev-profile-card">
+        <div class="dev-avatar-ring">
+          <div class="dev-avatar">LS</div>
+          <div class="dev-avatar-pulse"></div>
+        </div>
+        <div class="dev-details">
+          <span class="dev-by-label">Developed by</span>
+          <span class="dev-name">Lipsita Samal</span>
+          <span class="dev-email">lipsitasamal3@gmail.com</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="header-badge">
+          <span class="badge-dot"></span>
+          CampusOS v1.0
+        </div>
+        <div class="current-date" id="current-date"></div>
+      </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════════
+         MODULE: DASHBOARD
+    ═══════════════════════════════════════════════════ -->
+    <section class="module active" id="module-dashboard">
+
+      <!-- Welcome Banner -->
+      <div class="welcome-banner" id="welcome-banner">
+        <div class="wb-bg-orb wb-orb-1"></div>
+        <div class="wb-bg-orb wb-orb-2"></div>
+        <div class="wb-content">
+          <div class="wb-left">
+            <p class="wb-greeting" id="wb-greeting">Good morning! 👋</p>
+            <h2 class="wb-title" id="wb-title">Welcome back, Student</h2>
+            <p class="wb-subtitle">Your academic command centre is ready. Let's crush it today.</p>
+            <div class="wb-chips" id="wb-chips">
+              <span class="wb-chip" id="chip-cgpa">🎓 CGPA: —</span>
+              <span class="wb-chip" id="chip-attn">📅 Attendance: —</span>
+              <span class="wb-chip" id="chip-res">🔗 Resources: 0</span>
+            </div>
+          </div>
+          <div class="wb-illustration">🎓</div>
+        </div>
+      </div>
+
+      <!-- Stat Cards -->
+      <div class="stats-grid">
+        <div class="stat-card stat-blue" style="animation-delay:0.05s">
+          <div class="stat-icon-wrap">🎓</div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-cgpa">—</span>
+            <span class="stat-label">Current CGPA</span>
+            <span class="stat-delta na" id="stat-cgpa-delta">Not set</span>
+          </div>
+          <div class="stat-ring-wrap">
+            <svg class="stat-ring" viewBox="0 0 56 56">
+              <circle class="sr-bg" cx="28" cy="28" r="22" />
+              <circle class="sr-fill sr-blue" cx="28" cy="28" r="22" id="sr-cgpa" stroke-dasharray="0 138"
+                stroke-dashoffset="0" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="stat-card stat-green" style="animation-delay:0.10s">
+          <div class="stat-icon-wrap">📅</div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-attendance">—</span>
+            <span class="stat-label">Overall Attendance</span>
+            <span class="stat-delta na" id="stat-attn-delta">No data</span>
+          </div>
+          <div class="stat-ring-wrap">
+            <svg class="stat-ring" viewBox="0 0 56 56">
+              <circle class="sr-bg" cx="28" cy="28" r="22" />
+              <circle class="sr-fill sr-green" cx="28" cy="28" r="22" id="sr-attn" stroke-dasharray="0 138"
+                stroke-dashoffset="0" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="stat-card stat-purple" style="animation-delay:0.15s">
+          <div class="stat-icon-wrap">🔗</div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-resources">0</span>
+            <span class="stat-label">Resources Saved</span>
+            <span class="stat-delta na" id="stat-res-delta">None saved</span>
+          </div>
+        </div>
+
+        <div class="stat-card stat-orange" style="animation-delay:0.20s">
+          <div class="stat-icon-wrap">📊</div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-subjects">0</span>
+            <span class="stat-label">Subjects Tracked</span>
+            <span class="stat-delta na" id="stat-sub-delta">Not tracking</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard Grid -->
+      <div class="dashboard-grid">
+
+        <!-- Attendance Overview -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">📅 Attendance Overview</h2>
+            <button class="card-action-btn" onclick="showModule('attendance')">View All →</button>
+          </div>
+          <div id="dash-attendance-list" class="dash-list">
+            <p class="empty-msg">
+              <span class="empty-icon">📅</span>
+              No subjects tracked yet.<br>
+              <button class="link-btn" onclick="showModule('attendance')">Add subjects →</button>
+            </p>
+          </div>
+        </div>
+
+        <!-- Recent Resources -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">🔗 Recent Resources</h2>
+            <button class="card-action-btn" onclick="showModule('resources')">View All →</button>
+          </div>
+          <div id="dash-resources-list" class="dash-list">
+            <p class="empty-msg">
+              <span class="empty-icon">🔗</span>
+              No resources saved yet.<br>
+              <button class="link-btn" onclick="showModule('resources')">Add resources →</button>
+            </p>
+          </div>
+        </div>
+
+        <!-- Quick Attendance Check -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">⚡ Quick Attendance Check</h2>
+          </div>
+          <div class="quick-calc">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Classes Attended</label>
+                <input type="number" id="q-attended" placeholder="60" min="0" oninput="quickAttendCalc()" />
+              </div>
+              <div class="form-group">
+                <label>Total Classes</label>
+                <input type="number" id="q-total" placeholder="80" min="0" oninput="quickAttendCalc()" />
+              </div>
+            </div>
+            <div id="q-result" class="quick-result"></div>
+          </div>
+        </div>
+
+        <!-- Quick SGPA Check -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">⚡ Quick SGPA Check</h2>
+          </div>
+          <div class="quick-calc">
+            <p style="font-size:0.79rem;color:var(--text-muted);margin-bottom:10px;">Enter credits &amp; grade points
+              per subject:</p>
+            <div id="quick-sgpa-subjects">
+              <div class="quick-sgpa-row">
+                <input type="number" placeholder="Credits" min="1" max="6" class="q-credits"
+                  oninput="quickSGPACalc()" />
+                <input type="number" placeholder="Grade Pts" min="0" max="10" step="0.01" class="q-grade"
+                  oninput="quickSGPACalc()" />
+              </div>
+            </div>
+            <button class="btn btn-sm btn-outline" onclick="addQuickSGPARow()" style="margin-top:8px;">+ Add
+              Subject</button>
+            <div id="q-sgpa-result" class="quick-result"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         MODULE: ACADEMIC HUB
+    ═══════════════════════════════════════════════════ -->
+    <section class="module" id="module-academics">
+      <div class="module-header">
+        <div class="module-header-left">
+          <h1 class="module-title">Academic Hub</h1>
+          <p class="module-subtitle">Percentage · SGPA · CGPA · Target Predictor</p>
+        </div>
+      </div>
+
+      <div class="tab-nav">
+        <button class="tab-btn active" onclick="showAcadTab('percentage', this)">% Calculator</button>
+        <button class="tab-btn" onclick="showAcadTab('sgpa', this)">SGPA</button>
+        <button class="tab-btn" onclick="showAcadTab('cgpa', this)">CGPA</button>
+        <button class="tab-btn" onclick="showAcadTab('target', this)">Target CGPA</button>
+      </div>
+
+      <!-- Percentage -->
+      <div class="tab-content active" id="tab-percentage">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">📊 Percentage Calculator</h2>
+            <button class="btn btn-sm btn-outline" onclick="addPercentSubject()">+ Add Subject</button>
+          </div>
+          <div id="percent-subjects">
+            <div class="subject-row" data-index="0">
+              <input type="text" placeholder="Subject Name" class="sub-name" />
+              <input type="number" placeholder="Marks Obtained" class="sub-obtained" min="0"
+                oninput="calcPercentage()" />
+              <input type="number" placeholder="Maximum Marks" class="sub-max" min="1" oninput="calcPercentage()" />
+              <button class="remove-btn" onclick="removeSubjectRow(this,'percent-subjects',calcPercentage)"
+                title="Remove">✕</button>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="calcPercentage()" style="margin-top:18px;">Calculate
+            Percentage</button>
+          <div id="percent-result" class="result-card hidden"></div>
+        </div>
+      </div>
+
+      <!-- SGPA -->
+      <div class="tab-content" id="tab-sgpa">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">🏆 SGPA Calculator</h2>
+            <button class="btn btn-sm btn-outline" onclick="addSGPASubject()">+ Add Subject</button>
+          </div>
+          <div class="table-header-row">
+            <span>Subject Name</span><span>Credits</span><span>Grade Points</span><span></span>
+          </div>
+          <div id="sgpa-subjects">
+            <div class="subject-row" data-index="0">
+              <input type="text" placeholder="e.g. Data Structures" class="sub-name" />
+              <input type="number" placeholder="3" class="sub-credits" min="1" max="6" oninput="calcSGPA()" />
+              <input type="number" placeholder="8.5" class="sub-grade" min="0" max="10" step="0.01"
+                oninput="calcSGPA()" />
+              <button class="remove-btn" onclick="removeSubjectRow(this,'sgpa-subjects',calcSGPA)"
+                title="Remove">✕</button>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="calcSGPA()" style="margin-top:18px;">Calculate SGPA</button>
+          <div id="sgpa-result" class="result-card hidden"></div>
+        </div>
+      </div>
+
+      <!-- CGPA -->
+      <div class="tab-content" id="tab-cgpa">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">🎯 CGPA Calculator</h2>
+            <button class="btn btn-sm btn-outline" onclick="addCGPASemester()">+ Add Semester</button>
+          </div>
+          <div class="table-header-row" style="grid-template-columns:2fr 1fr 28px;">
+            <span>Semester</span><span>SGPA</span><span></span>
+          </div>
+          <div id="cgpa-semesters">
+            <div class="subject-row" data-index="0">
+              <input type="text" placeholder="Semester 1" class="sub-name" />
+              <input type="number" placeholder="8.0" class="sub-sgpa" min="0" max="10" step="0.01"
+                oninput="calcCGPA()" />
+              <button class="remove-btn" onclick="removeSubjectRow(this,'cgpa-semesters',calcCGPA)"
+                title="Remove">✕</button>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="calcCGPA()" style="margin-top:18px;">Calculate CGPA</button>
+          <div id="cgpa-result" class="result-card hidden"></div>
+        </div>
+      </div>
+
+      <!-- Target CGPA -->
+      <div class="tab-content" id="tab-target">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">🎯 Target CGPA Predictor</h2>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="t-current-cgpa">Current CGPA</label>
+              <input type="number" id="t-current-cgpa" placeholder="e.g. 8.2" min="0" max="10" step="0.01" />
+            </div>
+            <div class="form-group">
+              <label for="t-completed-sems">Completed Semesters</label>
+              <input type="number" id="t-completed-sems" placeholder="e.g. 4" min="1" max="20" />
+            </div>
+            <div class="form-group">
+              <label for="t-target-cgpa">Target CGPA</label>
+              <input type="number" id="t-target-cgpa" placeholder="e.g. 8.8" min="0" max="10" step="0.01" />
+            </div>
+            <div class="form-group">
+              <label for="t-total-sems">Total Semesters</label>
+              <input type="number" id="t-total-sems" placeholder="e.g. 8" min="1" max="20" />
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="calcTargetCGPA()">Predict Required SGPA</button>
+          <div id="target-result" class="result-card hidden"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         MODULE: ATTENDANCE HUB
+    ═══════════════════════════════════════════════════ -->
+    <section class="module" id="module-attendance">
+      <div class="module-header">
+        <div class="module-header-left">
+          <h1 class="module-title">Attendance Hub</h1>
+          <p class="module-subtitle">Track, calculate and analyse your attendance</p>
+        </div>
+      </div>
+
+      <div class="tab-nav">
+        <button class="tab-btn active" onclick="showAttendTab('calculator', this)">Calculator</button>
+        <button class="tab-btn" onclick="showAttendTab('tracker', this)">Tracker</button>
+        <button class="tab-btn" onclick="showAttendTab('attn-dashboard', this)">Dashboard</button>
+        <button class="tab-btn" onclick="showAttendTab('history', this)">History</button>
+      </div>
+
+      <!-- Attendance Calculator -->
+      <div class="attend-tab-content active" id="attend-tab-calculator">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">🧮 Attendance Calculator</h2>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="ac-attended">Classes Attended</label>
+              <input type="number" id="ac-attended" placeholder="e.g. 60" min="0" oninput="calcAttendance()" />
+            </div>
+            <div class="form-group">
+              <label for="ac-total">Total Classes Conducted</label>
+              <input type="number" id="ac-total" placeholder="e.g. 80" min="0" oninput="calcAttendance()" />
+            </div>
+            <div class="form-group">
+              <label for="ac-required">Required Attendance %</label>
+              <input type="number" id="ac-required" placeholder="75" min="1" max="100" value="75"
+                oninput="calcAttendance()" />
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="calcAttendance()">Calculate</button>
+          <div id="ac-result" class="result-card hidden"></div>
+        </div>
+      </div>
+
+      <!-- Attendance Tracker -->
+      <div class="attend-tab-content" id="attend-tab-tracker">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">📋 Subject Tracker</h2>
+            <span class="subjects-count-badge" id="subjects-count-badge" style="display:none"></span>
+          </div>
+          <div class="add-subject-form">
+            <input type="text" id="new-subject-name" placeholder="Subject name (e.g. Data Structures)"
+              class="subject-input" onkeydown="if(event.key==='Enter')addTrackerSubject()" />
+            <button class="btn btn-primary" onclick="addTrackerSubject()">+ Add Subject</button>
+          </div>
+          <div id="tracker-subjects-list" class="tracker-list">
+            <p class="empty-msg" id="tracker-empty">
+              <span class="empty-icon">📋</span>
+              No subjects yet. Add your first subject above!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Attendance Dashboard -->
+      <div class="attend-tab-content" id="attend-tab-attn-dashboard">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">📊 Attendance Dashboard</h2>
+            <button class="btn btn-sm btn-outline" onclick="refreshAttnDashboard()">🔄 Refresh</button>
+          </div>
+          <div class="overall-attendance-card" id="overall-attn-card">
+            <div class="oa-ring-wrap" id="oa-ring-wrap">
+              <svg viewBox="0 0 88 88">
+                <circle class="oa-ring-bg" cx="44" cy="44" r="36" />
+                <circle class="oa-ring-fill" id="oa-ring-fill" cx="44" cy="44" r="36" stroke-dasharray="0 226"
+                  stroke-dashoffset="0" />
+              </svg>
+              <div class="oa-ring-text" id="oa-percent">—</div>
+            </div>
+            <div class="oa-info">
+              <h3>Overall Attendance</h3>
+              <p id="oa-summary">No subjects tracked yet.</p>
+            </div>
+          </div>
+          <div id="subject-attn-bars"></div>
+        </div>
+      </div>
+
+      <!-- Attendance History -->
+      <div class="attend-tab-content" id="attend-tab-history">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">📜 Attendance History</h2>
+            <button class="btn btn-sm btn-danger" onclick="clearAttendanceHistory()">Clear History</button>
+          </div>
+          <div id="attendance-history-list" class="history-list">
+            <p class="empty-msg">
+              <span class="empty-icon">📜</span>
+              No records yet. Mark attendance to see history.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         MODULE: RESOURCE MANAGER
+    ═══════════════════════════════════════════════════ -->
+    <section class="module" id="module-resources">
+      <div class="module-header">
+        <div class="module-header-left">
+          <h1 class="module-title">Resource Manager</h1>
+          <p class="module-subtitle">Store and organise your study links, notes and references</p>
+        </div>
+      </div>
+
+      <div class="resource-toolbar">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="resource-search" placeholder="Search resources by title or notes…"
+            oninput="filterResources()" />
+        </div>
+        <button class="btn btn-primary" onclick="openResourceModal()">+ Add Resource</button>
+      </div>
+
+      <div class="category-filter" id="category-filter">
+        <button class="cat-btn active" onclick="filterByCategory('all', this)">All</button>
+        <button class="cat-btn" onclick="filterByCategory('LinkedIn', this)">💼 LinkedIn</button>
+        <button class="cat-btn" onclick="filterByCategory('GitHub', this)">🐱 GitHub</button>
+        <button class="cat-btn" onclick="filterByCategory('LeetCode', this)">💻 LeetCode</button>
+        <button class="cat-btn" onclick="filterByCategory('Notes', this)">📝 Notes</button>
+        <button class="cat-btn" onclick="filterByCategory('PDFs', this)">📄 PDFs</button>
+        <button class="cat-btn" onclick="filterByCategory('YouTube', this)">▶️ YouTube</button>
+        <button class="cat-btn" onclick="filterByCategory('Custom', this)">⭐ Custom</button>
+      </div>
+
+      <div id="resources-grid" class="resources-grid">
+        <p class="empty-msg" id="resources-empty">
+          <span class="empty-icon">🔗</span>
+          No resources saved yet.<br>Click "+ Add Resource" to get started!
+        </p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         MODULE: RESUME BUILDER
+    ═══════════════════════════════════════════════════ -->
+    <section class="module" id="module-resume">
+      <div class="module-header">
+        <div class="module-header-left">
+          <h1 class="module-title">Resume Builder</h1>
+          <p class="module-subtitle">Build your professional resume with live preview</p>
+        </div>
+      </div>
+
+      <div class="resume-layout">
+
+        <!-- ── LEFT: FORM PANEL ── -->
+        <div class="resume-form-panel">
+
+          <!-- Resume Completeness Score -->
+          <div class="resume-score-card">
+            <div class="rs-header">
+              <div class="rs-title-wrap">
+                <span class="rs-icon">📋</span>
+                <span class="rs-title">Resume Completeness</span>
+              </div>
+              <span class="rs-pct" id="resume-score-pct">0%</span>
+            </div>
+            <div class="rs-bar-wrap">
+              <div class="rs-bar">
+                <div class="rs-fill" id="resume-score-fill" style="width:0%"></div>
+              </div>
+            </div>
+            <div class="rs-tips" id="resume-score-tips">
+              <span class="rs-tip">Fill in your details below to build your resume</span>
+            </div>
+          </div>
+
+          <!-- Personal Info -->
+          <div class="card resume-card">
+            <div class="card-header">
+              <h2 class="card-title">👤 Personal Information</h2>
+            </div>
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label for="r-name">Full Name *</label>
+                <input type="text" id="r-name" placeholder="John Doe" oninput="updateResume()" />
+              </div>
+              <div class="form-group">
+                <label for="r-email">Email *</label>
+                <input type="email" id="r-email" placeholder="john@email.com" oninput="updateResume()" />
+              </div>
+              <div class="form-group">
+                <label for="r-phone">Phone *</label>
+                <input type="tel" id="r-phone" placeholder="+91 98765 43210" oninput="updateResume()" />
+              </div>
+              <div class="form-group">
+                <label for="r-linkedin">LinkedIn</label>
+                <input type="url" id="r-linkedin" placeholder="linkedin.com/in/johndoe" oninput="updateResume()" />
+              </div>
+              <div class="form-group">
+                <label for="r-github">GitHub</label>
+                <input type="url" id="r-github" placeholder="github.com/johndoe" oninput="updateResume()" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Education -->
+          <div class="card resume-card">
+            <div class="card-header">
+              <h2 class="card-title">🏫 Education</h2>
+            </div>
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label for="r-college">College / University *</label>
+                <input type="text" id="r-college" placeholder="e.g. ABC Institute of Technology"
+                  oninput="updateResume()" />
+              </div>
+              <div class="form-group">
+                <label for="r-degree">Degree *</label>
+                <input type="text" id="r-degree" placeholder="e.g. B.Tech CSE" oninput="updateResume()" />
+              </div>
+              <div class="form-group">
+                <label for="r-cgpa">CGPA</label>
+                <input type="text" id="r-cgpa" placeholder="e.g. 8.5 / 10" oninput="updateResume()" />
+              </div>
+              <div class="form-group">
+                <label for="r-grad-year">Graduation Year</label>
+                <input type="text" id="r-grad-year" placeholder="e.g. 2026" oninput="updateResume()" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Skills -->
+          <div class="card resume-card">
+            <div class="card-header">
+              <h2 class="card-title">💡 Skills</h2>
+            </div>
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label for="r-languages">Programming Languages * <span
+                    style="color:var(--text-muted);font-weight:400">(comma-separated)</span></label>
+                <input type="text" id="r-languages" placeholder="e.g. Python, Java, C++" oninput="updateResume()" />
+              </div>
+              <div class="form-group full-width">
+                <label for="r-technologies">Technologies / Frameworks</label>
+                <input type="text" id="r-technologies" placeholder="e.g. React, Node.js, Spring Boot"
+                  oninput="updateResume()" />
+              </div>
+              <div class="form-group full-width">
+                <label for="r-tools">Tools</label>
+                <input type="text" id="r-tools" placeholder="e.g. Git, Docker, VS Code" oninput="updateResume()" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Projects -->
+          <div class="card resume-card">
+            <div class="card-header">
+              <h2 class="card-title">🚀 Projects</h2>
+              <button class="btn btn-sm btn-outline" onclick="addResumeProject()">+ Add Project</button>
+            </div>
+            <div id="resume-projects">
+              <div class="resume-entry" data-index="0">
+                <div class="resume-entry-header">
+                  <span class="entry-label">Project 1</span>
+                  <button class="remove-btn" onclick="removeResumeEntry(this,'resume-projects',updateResume)"
+                    title="Remove">✕</button>
+                </div>
+                <div class="form-grid">
+                  <div class="form-group full-width">
+                    <label>Project Name *</label>
+                    <input type="text" placeholder="e.g. Student Portal" class="proj-name" oninput="updateResume()" />
+                  </div>
+                  <div class="form-group full-width">
+                    <label>Description</label>
+                    <textarea placeholder="Brief description of the project…" class="proj-desc" rows="2"
+                      oninput="updateResume()"></textarea>
+                  </div>
+                  <div class="form-group full-width">
+                    <label>Tech Stack</label>
+                    <input type="text" placeholder="e.g. React, Firebase" class="proj-tech" oninput="updateResume()" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Achievements -->
+          <div class="card resume-card">
+            <div class="card-header">
+              <h2 class="card-title">🏅 Achievements</h2>
+              <button class="btn btn-sm btn-outline" onclick="addResumeAchievement()">+ Add</button>
+            </div>
+            <div id="resume-achievements">
+              <div class="resume-entry" data-index="0">
+                <div class="resume-entry-header">
+                  <span class="entry-label">Achievement 1</span>
+                  <button class="remove-btn" onclick="removeResumeEntry(this,'resume-achievements',updateResume)"
+                    title="Remove">✕</button>
+                </div>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label>Type</label>
+                    <select class="ach-type" onchange="updateResume()">
+                      <option value="Certification">Certification</option>
+                      <option value="Award">Award</option>
+                      <option value="Activity">Activity</option>
+                      <option value="Leadership">Leadership Position</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Title *</label>
+                    <input type="text" placeholder="e.g. AWS Cloud Practitioner" class="ach-title"
+                      oninput="updateResume()" />
+                  </div>
+                  <div class="form-group full-width">
+                    <label>Description (Optional)</label>
+                    <input type="text" placeholder="Brief detail…" class="ach-desc" oninput="updateResume()" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="text-align:center;margin:10px 0 20px;">
+            <button class="btn btn-primary btn-lg" onclick="printResume()">🖨️ Print / Download Resume</button>
+          </div>
+        </div>
+
+        <!-- ── RIGHT: LIVE PREVIEW ── -->
+        <div class="resume-preview-panel">
+          <div class="preview-header">
+            <span>📋 Live Preview</span>
+            <button class="btn btn-sm btn-outline" onclick="printResume()">Print ↗</button>
+          </div>
+          <div id="resume-preview" class="resume-preview">
+            <div class="rp-header">
+              <h1 class="rp-name" id="rp-name">Your Name</h1>
+              <div class="rp-contact" id="rp-contact">
+                <span id="rp-email">email@example.com</span>
+                <span>|</span>
+                <span id="rp-phone">+91 00000 00000</span>
+                <span>|</span>
+                <span id="rp-linkedin">linkedin.com/in/profile</span>
+                <span>|</span>
+                <span id="rp-github">github.com/profile</span>
+              </div>
+            </div>
+            <hr class="rp-divider" />
+            <div class="rp-section">
+              <h2 class="rp-section-title">Education</h2>
+              <div class="rp-edu-row">
+                <div>
+                  <strong id="rp-degree">B.Tech Computer Science</strong>
+                  <span class="rp-sub"> — <span id="rp-college">Your College</span></span>
+                </div>
+                <div class="rp-right">
+                  <span id="rp-cgpa">CGPA: —</span> &nbsp;|&nbsp; <span id="rp-grad-year">Year</span>
+                </div>
+              </div>
+            </div>
+            <hr class="rp-divider" />
+            <div class="rp-section" id="rp-skills-section">
+              <h2 class="rp-section-title">Skills</h2>
+              <div id="rp-skills-content"></div>
+            </div>
+            <hr class="rp-divider" />
+            <div class="rp-section" id="rp-projects-section">
+              <h2 class="rp-section-title">Projects</h2>
+              <div id="rp-projects-content"></div>
+            </div>
+            <hr class="rp-divider" />
+            <div class="rp-section" id="rp-achievements-section">
+              <h2 class="rp-section-title">Achievements</h2>
+              <div id="rp-achievements-content"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         MODULE: EDIT PROFILE
+    ═══════════════════════════════════════════════════ -->
+    <section class="module" id="module-profile">
+      <div class="module-header">
+        <div class="module-header-left">
+          <h1 class="module-title">Edit Profile</h1>
+          <p class="module-subtitle">Personalise your CampusOS experience</p>
+        </div>
+      </div>
+
+      <div class="profile-layout">
+
+        <!-- Avatar Preview Card -->
+        <div class="profile-avatar-card">
+          <div class="profile-avatar-wrap" id="profile-avatar-wrap">
+            <div class="profile-avatar-ring">
+              <div class="profile-avatar-img" id="profile-avatar-display">👤</div>
+            </div>
+            <div class="profile-avatar-pulse"></div>
+          </div>
+          <p class="profile-avatar-hint">Upload a profile picture or leave blank for the default icon</p>
+          <label for="prof-pic-input" class="btn btn-outline" style="cursor:pointer;margin-top:6px;">📷 Choose
+            Photo</label>
+          <input type="file" id="prof-pic-input" accept="image/*" style="display:none"
+            onchange="handleProfilePicUpload(event)" />
+          <button class="btn btn-sm btn-danger" onclick="removeProfilePic()" style="margin-top:6px;">✕ Remove
+            Photo</button>
+        </div>
+
+        <!-- Profile Form -->
+        <div class="profile-form-panel">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">👤 Personal Details</h2>
+            </div>
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label for="prof-name">Display Name</label>
+                <input type="text" id="prof-name" placeholder="e.g. Lipsita Samal" />
+              </div>
+              <div class="form-group full-width">
+                <label for="prof-username">Username</label>
+                <input type="text" id="prof-username" placeholder="e.g. lipsita_s" />
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="card-header">
+              <h2 class="card-title">🏫 Academic Details</h2>
+            </div>
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label for="prof-college">College / University</label>
+                <input type="text" id="prof-college" placeholder="e.g. ABC Institute of Technology" />
+              </div>
+              <div class="form-group">
+                <label for="prof-branch">Branch / Department</label>
+                <input type="text" id="prof-branch" placeholder="e.g. CSE" />
+              </div>
+              <div class="form-group">
+                <label for="prof-year">Current Year</label>
+                <select id="prof-year">
+                  <option value="">Select Year</option>
+                  <option value="1st Year">1st Year</option>
+                  <option value="2nd Year">2nd Year</option>
+                  <option value="3rd Year">3rd Year</option>
+                  <option value="4th Year">4th Year</option>
+                  <option value="5th Year">5th Year</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
+            <button class="btn btn-primary btn-lg" onclick="saveProfile()">💾 Save Profile</button>
+            <button class="btn btn-outline" onclick="resetProfile()">↺ Reset to Defaults</button>
+          </div>
+
+          <!-- Profile Info Preview -->
+          <div class="profile-preview-card" id="profile-preview-card" style="display:none;margin-top:20px;">
+            <div class="pp-header">✅ Current Profile</div>
+            <div class="pp-row"><span class="pp-label">Name</span><span class="pp-value" id="pp-name">—</span></div>
+            <div class="pp-row"><span class="pp-label">Username</span><span class="pp-value" id="pp-username">—</span>
+            </div>
+            <div class="pp-row"><span class="pp-label">College</span><span class="pp-value" id="pp-college">—</span>
+            </div>
+            <div class="pp-row"><span class="pp-label">Branch</span><span class="pp-value" id="pp-branch">—</span></div>
+            <div class="pp-row"><span class="pp-label">Year</span><span class="pp-value" id="pp-year">—</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══ RESOURCE MODAL ═══ -->
+  <div class="modal-overlay" id="resource-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="resource-modal-title">🔗 Add Resource</h2>
+        <button class="modal-close" onclick="closeResourceModal()" aria-label="Close">✕</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label for="res-title">Title *</label>
+          <input type="text" id="res-title" placeholder="Resource title" />
+        </div>
+        <div class="form-group full-width">
+          <label for="res-url">URL / Link</label>
+          <input type="url" id="res-url" placeholder="https://…" />
+        </div>
+        <div class="form-group">
+          <label for="res-category">Category</label>
+          <select id="res-category">
+            <option value="LinkedIn">💼 LinkedIn</option>
+            <option value="GitHub">🐱 GitHub</option>
+            <option value="LeetCode">💻 LeetCode</option>
+            <option value="Notes">📝 Notes</option>
+            <option value="PDFs">📄 PDFs</option>
+            <option value="YouTube">▶️ YouTube</option>
+            <option value="Custom">⭐ Custom</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="res-notes">Notes (Optional)</label>
+          <input type="text" id="res-notes" placeholder="Brief description…" />
+        </div>
+      </div>
+      <input type="hidden" id="res-edit-id" value="" />
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeResourceModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveResource()">Save Resource</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TOAST ═══ -->
+  <div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
